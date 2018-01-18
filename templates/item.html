@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Build a Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .external_page {
+            position: absolute;
+            width: 100%;
+            height: 90%;
+            height: calc(100% - 50px);
+            border: none;
+        }
+        .submit_form {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+<iframe class="external_page" src="{{ url }}"></iframe>
+<form class="submit_form" method="post" action="">
+    <input name="submit" type="submit" value="Submit"/>
+</form>
+</body>
+</html>

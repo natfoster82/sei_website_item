@@ -11,32 +11,28 @@ app.config.from_pyfile('config.py')
 
 
 @app.route('/url', methods=['POST'])
-def url():
+def get_url():
     data = request.get_json() or request.form
-    bin_id = data.get('bin_id')
-    bin_version = data.get('bin_version', 1)
+    plunk_id = data.get('plunk_id')
     response_id = data.get('response_id')
     external_token = data.get('external_token')
-    token = external_serializer.dumps([bin_id, bin_version, response_id, external_token])
+    token = external_serializer.dumps([plunk_id, response_id, external_token])
     return url_for('item', token=token, _external=True)
 
 
 @app.route('/item/<token>', methods=['GET', 'POST'])
 def item(token):
     try:
-        bin_id, bin_version, response_id, external_token = external_serializer.loads(token, max_age=3600)
+        plunk_id, response_id, external_token = external_serializer.loads(token, max_age=7200)
     except (BadSignature, SignatureExpired):
         abort(403)
 
     if request.method == 'POST':
+        # https://run.plnkr.co/plunks/mIt9wGkL7YSo4Rjnez68/
         return redirect(url_for('thank_you'))
 
-    start_url = 'http://jsbin.com/{0}/{1}/edit?html,output'.format(bin_id, str(bin_version))
-
-    clone = requests.get('https://jsbin.com/clone', headers={'referer': start_url}, allow_redirects=False)
-    fresh_url = 'http://jsbin.com' + clone.headers['Location']
-
-    return render_template('item.html', url=fresh_url, token=token)
+    url = 'https://plnkr.co/edit/{0}'.format(plunk_id)
+    return render_template('item.html', url=url, token=token)
 
 
 @app.route('/thank_you')

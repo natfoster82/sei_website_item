@@ -22,4 +22,4 @@ redis==2.10.6
 requests[security]==2.18.4
 six==1.11.0               # via cryptography, pyopenssl
 urllib3==1.22             # via requests
-werkzeug==0.14.1          # via flask
+werkzeug==0.15.3          # via flask
